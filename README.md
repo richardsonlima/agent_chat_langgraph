@@ -9,6 +9,8 @@ A FastAPI-based conversational AI agent with long-term memory and modular archit
 - [Use Cases](#use-cases)
 - [Project Structure](#project-structure)
 - [Agent Implementation](#agent-implementation)
+- [Streamlit Quick Chat](#streamlit-quick-chat)
+- [Frontend ReactJS](#frontend-reactjs)
 - [Get Started](#get-started)
 - [Development Notes](#development-notes)
 - [Troubleshooting](#troubleshooting)
@@ -41,21 +43,23 @@ A FastAPI-based conversational AI agent with long-term memory and modular archit
 ## Project Structure
 ```
 agent_chat_langgraph/
-└── app/
-    ├── main.py              # FastAPI app with webhook endpoint
-    ├── core/
-    │   └── memory.py        # Long-term memory management (JSON-based)
-    ├── models/
-    │   └── chat.py          # State and message models
-    ├── prompts/
-    │   └── system.py        # System prompt and instructions
-    ├── services/
-    │   └── llm.py           # LLM integration (OpenRouter)
-    ├── workflows/
-    │   └── graph.py         # Conversation flow logic using LangGraph (main agent logic)
-    ├── utils/               # (Optional) Utility functions
-    ├── scripts/             # (Optional) Helper scripts
-    └── tests/               # (Optional) Unit and integration tests
+├── app/
+│   ├── main.py              # FastAPI app with webhook endpoint
+│   ├── core/
+│   │   └── memory.py        # Long-term memory management (JSON-based)
+│   ├── models/
+│   │   └── chat.py          # State and message models
+│   ├── prompts/
+│   │   └── system.py        # System prompt and instructions
+│   ├── services/
+│   │   └── llm.py           # LLM integration (OpenRouter)
+│   ├── workflows/
+│   │   └── graph.py         # Conversation flow logic using LangGraph (main agent logic)
+│   ├── utils/               # (Optional) Utility functions
+│   ├── scripts/             # (Optional) Helper scripts
+│   └── tests/               # (Optional) Unit and integration tests
+├── frontend/                # ReactJS frontend (see its own README.md)
+├── streamlit_chat.py        # Streamlit quick chat interface for rapid validation
 ├── requirements.txt         # Python dependencies
 ├── .env.example             # Example environment variables
 ├── trash/                   # (Backup) Old files for reference
@@ -69,6 +73,52 @@ The core agent logic is implemented in a modular way:
 - **`app/models/chat.py`**: Defines data models for messages and agent state.
 
 The FastAPI endpoint in `app/main.py` acts as the entry point, but the actual agent logic is in `workflows/graph.py` and the supporting modules above.
+
+## Streamlit Quick Chat
+For rapid validation and testing of the agent backend, you can use the included Streamlit chat interface. This allows you to interact with the agent without needing to run the full ReactJS frontend in `frontend/`.
+
+**How to use:**
+
+1. Install the required dependencies (if not already installed):
+   ```bash
+   pip install streamlit requests
+   ```
+2. Run the chat:
+   ```bash
+   streamlit run streamlit_chat.py
+   ```
+3. The chat will open in your browser and connect to the FastAPI backend at `http://localhost:8000/webhook`.
+
+> The file is located at `streamlit_chat.py` in the project root.
+
+## Frontend ReactJS
+The project includes a modern ReactJS frontend located in the `frontend/` folder. This frontend provides a more complete and customizable chat interface for interacting with the agent.
+
+**How to use:**
+
+1. Go to the frontend folder:
+   ```bash
+   cd frontend
+   ```
+2. Install the dependencies (using npm, yarn, or pnpm):
+   ```bash
+   npm install
+   # or
+   yarn
+   # or
+   pnpm install
+   ```
+3. Run the frontend:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+4. The frontend will be available at `http://localhost:3000` (or the configured port).
+
+> For more details, see the `README.md` file inside the `frontend/` folder.
 
 ## Get Started
 ### Backend
