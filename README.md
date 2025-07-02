@@ -14,6 +14,7 @@ A FastAPI-based conversational AI agent with long-term memory and modular archit
 - [Get Started](#get-started)
 - [Development Notes](#development-notes)
 - [Troubleshooting](#troubleshooting)
+- [Step-by-Step: Building and Running a LangGraph Agent](#step-by-step-building-and-running-a-langgraph-agent)
 
 ## Key Features
 - **Conversational AI Agent**: Handles user messages, maintains context, and generates intelligent responses.
@@ -143,6 +144,43 @@ The project includes a modern ReactJS frontend located in the `frontend/` folder
 - **Backend Not Responding**: Check FastAPI logs and ensure the server is running on the expected port.
 - **Memory Not Persisting**: Verify file permissions for your memory file or set the appropriate environment variable.
 - **Model Usage Limit**: If you see usage limit errors, check your OpenRouter API quota or try again later.
+
+## Step-by-Step: Building and Running a LangGraph Agent
+This project follows a modular, professional approach to building a LangGraph-based conversational agent. Here is a high-level step-by-step guide inspired by the referenced Medium article:
+
+1. **Define Message and State Models**
+   - Implement message and state data structures in `app/models/chat.py`.
+   - These models represent the conversation history and agent state.
+
+2. **Create System Prompts**
+   - Store and manage system prompts and instructions in `app/prompts/system.py`.
+   - Prompts guide the agent's behavior and responses.
+
+3. **Integrate the LLM**
+   - Use `app/services/llm.py` to connect to your LLM provider (e.g., OpenRouter).
+   - This module handles all LLM API calls and abstracts provider details.
+
+4. **Implement Long-Term Memory**
+   - Manage user memory and chat history in `app/core/memory.py`.
+   - This enables persistent, personalized conversations.
+
+5. **Design the Conversation Flow with LangGraph**
+   - Orchestrate the agent's reasoning and workflow in `app/workflows/graph.py` using LangGraph.
+   - Define how the agent processes input, updates state, and generates output.
+
+6. **Expose the Agent via FastAPI**
+   - The main FastAPI app in `app/main.py` provides a `/webhook` endpoint.
+   - This endpoint receives chat payloads, manages memory, invokes the LangGraph agent, and returns responses.
+
+7. **Test and Interact**
+   - Use the included Streamlit chat (`streamlit_chat.py`) for rapid backend validation.
+   - Or use the full ReactJS frontend in `frontend/` for a richer user experience.
+
+8. **Customize and Extend**
+   - Add new features, memory providers, or integrations by extending the modular components.
+   - Update prompts, state logic, or LLM provider as needed.
+
+> For a detailed, conceptual walkthrough, see the [Medium article](https://medium.com/@kts.ramamoorthy07/building-a-chat-agent-with-langgraph-a-step-by-step-guide-e3d3bbe640f0).
 
 ---
 
