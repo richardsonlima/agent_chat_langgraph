@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+langgraph
+openai
+requests
+python-dotenv
+streamlit
+# future dependencies
+# stream-chat-python
+# psycopg2-binary
+# wppconnect
+# groq
+# gtts

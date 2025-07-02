@@ -1,6 +1,6 @@
 # Agent Chat LangGraph
 
-A FastAPI-based conversational AI agent with long-term memory, streaming chat support, and modular architecture. This project leverages LangGraph for conversation flow, OpenRouter for LLM responses, and StreamChat for real-time chat token generation.
+A FastAPI-based conversational AI agent with long-term memory and modular architecture. This project leverages LangGraph for conversation flow and OpenRouter for LLM responses.
 
 ## Table of Contents
 - [Key Features](#key-features)
@@ -8,6 +8,9 @@ A FastAPI-based conversational AI agent with long-term memory, streaming chat su
 - [Future Implementation Features](#future-implementation-features)
 - [Use Cases](#use-cases)
 - [Project Structure](#project-structure)
+- [Agent Implementation](#agent-implementation)
+- [Streamlit Quick Chat](#streamlit-quick-chat)
+- [Frontend ReactJS](#frontend-reactjs)
 - [Get Started](#get-started)
 - [Development Notes](#development-notes)
 - [Troubleshooting](#troubleshooting)
@@ -15,17 +18,13 @@ A FastAPI-based conversational AI agent with long-term memory, streaming chat su
 ## Key Features
 - **Conversational AI Agent**: Handles user messages, maintains context, and generates intelligent responses.
 - **Long-Term Memory**: Stores and retrieves user chat history for personalized interactions.
-- **Streaming Chat Support**: Integrates with StreamChat for real-time messaging.
-- **REST API**: Exposes endpoints for chat and token generation.
+- **REST API**: Exposes endpoints for chat.
 - **CORS Enabled**: Ready for integration with web frontends.
-- **Streamlit Frontend**: Quick testing interface for development and demos.
 
 ## Built With
 - [LangGraph](https://github.com/langchain-ai/langgraph): Enables sophisticated, stateful agent workflows
 - [FastAPI](https://fastapi.tiangolo.com/): Provides the webhook endpoint and API infrastructure
 - [OpenRouter](https://openrouter.ai/): LLM provider
-- [StreamChat](https://getstream.io/chat/): Real-time chat API
-- [Streamlit](https://streamlit.io/): Rapid prototyping frontend
 - Python 3.9+
 
 ## Future Implementation Features
@@ -44,16 +43,82 @@ A FastAPI-based conversational AI agent with long-term memory, streaming chat su
 ## Project Structure
 ```
 agent_chat_langgraph/
-├── agent.py           # FastAPI app with endpoints for chat and token
-├── graph.py           # Conversation flow logic using LangGraph
-├── memory.py          # Long-term memory management (JSON-based)
-├── openrouter_llm.py  # LLM integration (OpenRouter)
-├── prompts.py         # System prompt and instructions
-├── state.py           # State and message models
-├── stream_chat.py     # StreamChat integration
-├── streamlit_chat.py  # Streamlit frontend for quick tests
-└── frontend/          # (Optional) Web frontend (see README inside)
+├── app/
+│   ├── main.py              # FastAPI app with webhook endpoint
+│   ├── core/
+│   │   └── memory.py        # Long-term memory management (JSON-based)
+│   ├── models/
+│   │   └── chat.py          # State and message models
+│   ├── prompts/
+│   │   └── system.py        # System prompt and instructions
+│   ├── services/
+│   │   └── llm.py           # LLM integration (OpenRouter)
+│   ├── workflows/
+│   │   └── graph.py         # Conversation flow logic using LangGraph (main agent logic)
+│   ├── utils/               # (Optional) Utility functions
+│   ├── scripts/             # (Optional) Helper scripts
+│   └── tests/               # (Optional) Unit and integration tests
+├── frontend/                # ReactJS frontend (see its own README.md)
+├── streamlit_chat.py        # Streamlit quick chat interface for rapid validation
+├── requirements.txt         # Python dependencies
+├── .env.example             # Example environment variables
+├── trash/                   # (Backup) Old files for reference
 ```
+
+## Agent Implementation
+The core agent logic is implemented in a modular way:
+- **`app/workflows/graph.py`**: Main orchestrator for the agent's reasoning, conversation flow, and response generation using LangGraph.
+- **`app/services/llm.py`**: Handles integration with the LLM (OpenRouter) for generating responses.
+- **`app/core/memory.py`**: Manages long-term memory for storing and retrieving user chat history.
+- **`app/models/chat.py`**: Defines data models for messages and agent state.
+
+The FastAPI endpoint in `app/main.py` acts as the entry point, but the actual agent logic is in `workflows/graph.py` and the supporting modules above.
+
+## Streamlit Quick Chat
+For rapid validation and testing of the agent backend, you can use the included Streamlit chat interface. This allows you to interact with the agent without needing to run the full ReactJS frontend in `frontend/`.
+
+**How to use:**
+
+1. Install the required dependencies (if not already installed):
+   ```bash
+   pip install streamlit requests
+   ```
+2. Run the chat:
+   ```bash
+   streamlit run streamlit_chat.py
+   ```
+3. The chat will open in your browser and connect to the FastAPI backend at `http://localhost:8000/webhook`.
+
+> The file is located at `streamlit_chat.py` in the project root.
+
+## Frontend ReactJS
+The project includes a modern ReactJS frontend located in the `frontend/` folder. This frontend provides a more complete and customizable chat interface for interacting with the agent.
+
+**How to use:**
+
+1. Go to the frontend folder:
+   ```bash
+   cd frontend
+   ```
+2. Install the dependencies (using npm, yarn, or pnpm):
+   ```bash
+   npm install
+   # or
+   yarn
+   # or
+   pnpm install
+   ```
+3. Run the frontend:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+4. The frontend will be available at `http://localhost:3000` (or the configured port).
+
+> For more details, see the `README.md` file inside the `frontend/` folder.
 
 ## Get Started
 ### Backend
@@ -63,29 +128,20 @@ agent_chat_langgraph/
    ```
 2. **Run the FastAPI server**:
    ```bash
-   uvicorn agent_chat_langgraph.agent:app --reload
+   uvicorn app.main:app --reload
    ```
 3. **Send requests** using your preferred HTTP client (e.g., Postman, curl, or a frontend app).
 
-### Streamlit Frontend (Quick Test)
-```bash
-streamlit run agent_chat_langgraph/streamlit_chat.py
-```
-
-### Web Frontend (Optional)
-See `frontend/README.md` for setup and usage instructions if you wish to use or build a full web interface.
-
 ## Development Notes
-- The current memory implementation (`memory.py`) is functional but illustrative. An advanced version using Mem0 will be released soon.
-- Prompts and agent behavior can be customized in `prompts.py`.
-- LLM provider and API keys are set in `openrouter_llm.py`.
+- The current memory implementation (`core/memory.py`) is functional but illustrative. An advanced version using Mem0 will be released soon.
+- Prompts and agent behavior can be customized in `prompts/system.py`.
+- LLM provider and API keys are set in `services/llm.py`.
 - For production, consider replacing JSON memory with a database or scalable store.
 
 ## Troubleshooting
 - **CORS Issues**: Ensure `allow_origins` in `CORSMiddleware` is set appropriately for your frontend.
 - **Backend Not Responding**: Check FastAPI logs and ensure the server is running on the expected port.
-- **Streamlit Errors**: Make sure all dependencies are installed and the backend is accessible at the configured URL.
-- **Memory Not Persisting**: Verify file permissions for `agent_memory.json` or set `AGENT_MEMORY_FILE` env variable.
+- **Memory Not Persisting**: Verify file permissions for your memory file or set the appropriate environment variable.
 - **Model Usage Limit**: If you see usage limit errors, check your OpenRouter API quota or try again later.
 
 ---
